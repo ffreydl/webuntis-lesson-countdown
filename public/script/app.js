@@ -91,95 +91,67 @@ function fetchTimetable(school, username, password) {
 function updateTimetableDisplay(timetableData) {
   console.log('Updating timetable display', timetableData);
   const currentTime = new Date();
-  //currentTime.setHours(8, 42, 15, 0); // For testing specific times, if needed
+  // currentTime.setHours(10, 44, 0); // For testing specific times, if needed
   const currentHours = currentTime.getHours();
   const currentMinutes = currentTime.getMinutes();
-  const totalCurrentMinutes = currentHours * 60 + currentMinutes;
+  const currentSeconds = currentTime.getSeconds();
+  const totalCurrentSeconds = currentHours * 3600 + currentMinutes * 60 + currentSeconds;
 
+  // Define break times (10:30 to 10:45) in seconds since start of the day
+  const breakStartTime = 10 * 3600 + 30 * 60;
+  const breakEndTime = 10 * 3600 + 45 * 60;
+  
   let currentLessonFound = false;
-  let isBreakTime = (totalCurrentMinutes >= 630 && totalCurrentMinutes <= 645); // 10:30 to 10:45
+  let isBreakTime = totalCurrentSeconds >= breakStartTime && totalCurrentSeconds <= breakEndTime;
 
   // Handle the break time separately
-  let totalRemainingMinutes = 645 - totalCurrentMinutes;
-  let remainingHours = Math.floor(totalRemainingMinutes / 60);
-  let remainingMinutes = totalRemainingMinutes % 60;
   if (isBreakTime) {
+    let totalRemainingSeconds = breakEndTime - totalCurrentSeconds;
+    let remainingMinutes = Math.floor(totalRemainingSeconds / 60);
+    let remainingSeconds = totalRemainingSeconds % 60;
+
     document.getElementById('currentLesson').innerHTML = `Kurze Pause`;
-    document.getElementById('countdown').innerHTML = `${remainingHours.toString().padStart(2, '0')}:${remainingMinutes.toString().padStart(2, '0')}`;
+    document.getElementById('countdown').innerHTML = `${remainingMinutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
     document.querySelector('#teacher span').innerHTML = '/';
     return;
   }
 
-  timetableData.sort((a, b) => a.startTime - b.startTime); // Ensure the data is sorted by start time
+  // Sort the timetable data just in case it's not already sorted
+  timetableData.sort((a, b) => a.startTime - b.startTime);
 
+  // Find the current lesson and the next lesson
   for (let lesson of timetableData) {
-    const startHours = Math.floor(lesson.startTime / 100);
-    const startMinutes = lesson.startTime % 100;
-    const endHours = Math.floor(lesson.endTime / 100);
-    const endMinutes = lesson.endTime % 100;
-  
-    const totalStartMinutes = startHours * 60 + startMinutes;
-    const totalEndMinutes = endHours * 60 + endMinutes;
-  
-    // Check if current time is during a lesson
-    if (totalCurrentMinutes >= totalStartMinutes && totalCurrentMinutes <= totalEndMinutes) {
-      // Get the 3 time in seconds
-      const currentTimeInSeconds = (currentHours * 60 + currentMinutes) * 60 + currentTime.getSeconds();
-      const totalEndSeconds = totalEndMinutes * 60;
-      const remainingSeconds = totalEndSeconds - currentTimeInSeconds;
-  
-      // Convert remaining time back into minutes and seconds
+    const lessonStartSeconds = Math.floor(lesson.startTime / 100) * 3600 + (lesson.startTime % 100) * 60;
+    const lessonEndSeconds = Math.floor(lesson.endTime / 100) * 3600 + (lesson.endTime % 100) * 60;
+
+    if (totalCurrentSeconds >= lessonStartSeconds && totalCurrentSeconds <= lessonEndSeconds) {
+      // In lesson
+      currentLessonFound = true;
+      const remainingSeconds = lessonEndSeconds - totalCurrentSeconds;
       const remainingMinutes = Math.floor(remainingSeconds / 60);
       const remainingExtraSeconds = remainingSeconds % 60;
-  
-      const subject = lesson.su && lesson.su.length > 0 ? lesson.su[0].longname : "N/A";
-  
-      // Filter and join teacher names
-      const validTeacherNames = lesson.te
-        .map(teacher => teacher.longname)
-        .filter(name => name && !/^-+|_+$/.test(name))  // Exclude invalid names
-        .join(", ");
-  
-      const teacherDisplay = validTeacherNames || "N/A";
-      
-      document.querySelector('#currentLesson span').innerHTML = `${subject}`;
+
+      const subject = lesson.su[0].longname;
+      const teacherNames = lesson.te.map(teacher => teacher.longname).join(", ");
+
+      document.querySelector('#currentLesson span').innerHTML = subject;
       document.getElementById('countdown').innerHTML = `${remainingMinutes.toString().padStart(2, '0')}:${remainingExtraSeconds.toString().padStart(2, '0')}`;
-      document.querySelector('#teacher span').innerHTML = `${teacherDisplay}`;
-  
-      currentLessonFound = true;
+      document.querySelector('#teacher span').innerHTML = teacherNames;
       break;
     }
-  }  
+  }
 
-  // After iterating through all lessons
   if (!currentLessonFound) {
-    const latestEndTime = Math.max(...timetableData.map(lesson => lesson.endTime));
-    const earliestStartTime = Math.min(...timetableData.map(lesson => lesson.startTime));
-    // Convert latestEndTime and earliestStartTime from HHMM to minutes
-    const latestEndTimeMinutes = Math.floor(latestEndTime / 100) * 60 + (latestEndTime % 100);
-    const earliestStartTimeMinutes = Math.floor(earliestStartTime / 100) * 60 + (earliestStartTime % 100);
-
-    // Find the next lesson after the current time
-    const nextLesson = timetableData.find(lesson => {
-      const startHours = Math.floor(lesson.startTime / 100);
-      const startMinutes = lesson.startTime % 100;
-      const totalStartMinutes = startHours * 60 + startMinutes;
-      return totalStartMinutes > totalCurrentMinutes;
-    });
-
-    // Calculate the remaining time until the next lesson starts
-    if (totalCurrentMinutes < earliestStartTimeMinutes) {
-      document.getElementById('currentLesson').innerHTML = "Der Schultag hat noch nicht begonnen.";
-      document.getElementById('countdown').innerHTML = "00:00";
-      document.querySelector('#teacher span').innerHTML = "";
-    } else if (totalCurrentMinutes < latestEndTimeMinutes && nextLesson) {
-      const nextLessonStartHours = Math.floor(nextLesson.startTime / 100);
-      const nextLessonStartMinutes = nextLesson.startTime % 100;
-      const totalNextStartMinutes = nextLessonStartHours * 60 + nextLessonStartMinutes;
-      const remainingMinutes = totalNextStartMinutes - totalCurrentMinutes;
+    // Not in lesson
+    const nextLesson = timetableData.find(lesson => Math.floor(lesson.startTime / 100) * 3600 + (lesson.startTime % 100) * 60 > totalCurrentSeconds);
+    if (nextLesson) {
+      const nextLessonStartSeconds = Math.floor(nextLesson.startTime / 100) * 3600 + (nextLesson.startTime % 100) * 60;
+      const remainingSeconds = nextLessonStartSeconds - totalCurrentSeconds;
+      const remainingMinutes = Math.floor(remainingSeconds / 60);
+      const remainingExtraSeconds = remainingSeconds % 60;
 
       document.getElementById('currentLesson').innerHTML = "Freistunde";
-      document.getElementById('countdown').innerHTML = `${remainingMinutes}`;
+      document.getElementById('countdown').innerHTML = `${remainingMinutes.toString().padStart(2, '0')}:${remainingExtraSeconds.toString().padStart(2, '0')}`;
       document.querySelector('#teacher span').innerHTML = "/";
     } else {
       document.getElementById('currentLesson').innerHTML = "Der Schultag ist vorbei.";
