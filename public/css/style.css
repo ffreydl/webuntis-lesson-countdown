@@ -55,9 +55,11 @@ header {
 }
 
 #countdown {
+  font-family: 'Nunito', sans-serif;
   font-weight: 700;
   font-size: 100px;
   min-width: 5ch;
+  line-height: 100%;
 }
 
 header {
