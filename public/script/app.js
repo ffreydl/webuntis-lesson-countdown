@@ -169,7 +169,7 @@ function updateTimetableDisplay(timetableData) {
       if (!currentLessonFound) {
         document.getElementById("currentLesson").textContent = "Der Schultag ist vorbei.";
         document.getElementById("countdown").textContent = "00:00";
-        document.querySelector("#teacher span").textContent = "";
+        document.querySelector("#teacher span").textContent = "/";
       }
     }
   };
