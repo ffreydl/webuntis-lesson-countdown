@@ -123,7 +123,7 @@ function updateTimetableDisplay(timetableData) {
   
     // Check if current time is during a lesson
     if (totalCurrentMinutes >= totalStartMinutes && totalCurrentMinutes <= totalEndMinutes) {
-      // Get the remaining time in seconds
+      // Get the 3 time in seconds
       const currentTimeInSeconds = (currentHours * 60 + currentMinutes) * 60 + currentTime.getSeconds();
       const totalEndSeconds = totalEndMinutes * 60;
       const remainingSeconds = totalEndSeconds - currentTimeInSeconds;
