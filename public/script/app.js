@@ -1,51 +1,66 @@
-document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOM fully loaded and parsed');
+// Constants for time calculations
+const SECONDS_PER_HOUR = 3600;
+const SECONDS_PER_MINUTE = 60;
+const BREAK_START_TIME = 10 * SECONDS_PER_HOUR + 30 * SECONDS_PER_MINUTE; // 10:30 AM in seconds
+const BREAK_END_TIME = 10 * SECONDS_PER_HOUR + 45 * SECONDS_PER_MINUTE; // 10:45 AM in seconds
+
+// Init application once DOM is fully loaded
+document.addEventListener("DOMContentLoaded", () => {
+  console.log("DOM fully loaded and parsed");
   setUpEventListeners();
   checkLoginStatus();
 });
 
+// Set up event listeners for login form and logout button
 function setUpEventListeners() {
-  console.log('Setting up event listeners');
-  document.getElementById('loginForm').addEventListener('submit', function(event) {
-    event.preventDefault();
-    const school = document.getElementById('school').value.trim();
-    const username = document.getElementById('username').value.trim();
-    const password = document.getElementById('password').value.trim();
-    if (school && username && password) {
-      saveCredentials(school, username, password);
-      displayMainSection();
-      fetchTimetable(school, username, password);
-    }
-  });
+  console.log("Setting up event listeners");
+  // EVent listener for login form submission
+  document
+    .getElementById("loginForm")
+    .addEventListener("submit", function (event) {
+      event.preventDefault();
+      const school = document.getElementById("school").value.trim();
+      const username = document.getElementById("username").value.trim();
+      const password = document.getElementById("password").value.trim();
+      if (school && username && password) {
+        saveCredentials(school, username, password);
+        displayMainSection();
+        fetchTimetable(school, username, password);
+      }
+    });
 
-  const logoutButton = document.getElementById('logoutButton');
+  // Event listener for logout button
+  const logoutButton = document.getElementById("logoutButton");
   if (logoutButton) {
-    logoutButton.addEventListener('click', () => {
+    logoutButton.addEventListener("click", () => {
       clearCredentials();
       displayLoginSection();
     });
   }
 }
 
+// Save credentials to local storage
 function saveCredentials(school, username, password) {
   console.log(`Saving credentials: ${school}, ${username}`);
-  localStorage.setItem('school', school);
-  localStorage.setItem('username', username);
-  localStorage.setItem('password', password);
+  localStorage.setItem("school", school);
+  localStorage.setItem("username", username);
+  localStorage.setItem("password", password);
 }
 
+// Clears user credentials from localStorage
 function clearCredentials() {
-  console.log('Clearing credentials');
-  localStorage.removeItem('school');
-  localStorage.removeItem('username');
-  localStorage.removeItem('password');
+  console.log("Clearing credentials");
+  localStorage.removeItem("school");
+  localStorage.removeItem("username");
+  localStorage.removeItem("password");
 }
 
+// Check login status and display main section if logged in
 function checkLoginStatus() {
-  console.log('Checking login status');
-  const school = localStorage.getItem('school');
-  const username = localStorage.getItem('username');
-  const password = localStorage.getItem('password');
+  console.log("Checking login status");
+  const school = localStorage.getItem("school");
+  const username = localStorage.getItem("username");
+  const password = localStorage.getItem("password");
 
   if (school && username && password) {
     displayMainSection();
@@ -55,108 +70,108 @@ function checkLoginStatus() {
   }
 }
 
+// Display main section and fetch timetable data
 function displayMainSection() {
-  console.log('Displaying main section');
-  document.getElementById('loginSection').style.display = 'none';
-  document.getElementById('mainSection').style.display = 'flex';
+  console.log("Displaying main section");
+  document.getElementById("loginSection").style.display = "none";
+  document.getElementById("mainSection").style.display = "flex";
 }
 
+// Display login section of the application
 function displayLoginSection() {
-  console.log('Displaying login section');
-  document.getElementById('loginSection').style.display = 'flex';
-  document.getElementById('mainSection').style.display = 'none';
+  console.log("Displaying login section");
+  document.getElementById("loginSection").style.display = "flex";
+  document.getElementById("mainSection").style.display = "none";
 }
 
+// Fetches the timetable data from the server
 function fetchTimetable(school, username, password) {
   console.log(`Fetching timetable for: ${school}, ${username}`);
-  fetch('/api/timetable', {
-    method: 'POST',
+  fetch("/api/timetable", {
+    method: "POST",
     headers: {
-      'Content-Type': 'application/json',
+      "Content-Type": "application/json",
     },
     body: JSON.stringify({ school, username, password }),
   })
-  .then(response => response.json())
-  .then(data => {
-    // 'data' contains timetable information
-    setInterval(() => {
-      updateTimetableDisplay(data);
-    }, 1000);
-  })
-  .catch(error => {
-    console.error('Error fetching timetable:', error);
-  });
+    .then((response) => response.json())
+    .then((data) => {
+      // 'data' contains timetable information
+      // Updates timetable display every second
+      setInterval(() => {
+        updateTimetableDisplay(data);
+      }, 1000);
+    })
+    .catch((error) => {
+      console.error("Error fetching timetable:", error);
+    });
 }
 
+// Updates the timetable display with current or next lesson or break information
 function updateTimetableDisplay(timetableData) {
-  console.log('Updating timetable display', timetableData);
-  const currentTime = new Date();
-  // currentTime.setHours(10, 44, 0); // For testing specific times, if needed
-  const currentHours = currentTime.getHours();
-  const currentMinutes = currentTime.getMinutes();
-  const currentSeconds = currentTime.getSeconds();
-  const totalCurrentSeconds = currentHours * 3600 + currentMinutes * 60 + currentSeconds;
+  console.log("Updating timetable display", timetableData);
 
-  // Define break times (10:30 to 10:45) in seconds since start of the day
-  const breakStartTime = 10 * 3600 + 30 * 60;
-  const breakEndTime = 10 * 3600 + 45 * 60;
-  
-  let currentLessonFound = false;
-  let isBreakTime = totalCurrentSeconds >= breakStartTime && totalCurrentSeconds <= breakEndTime;
+  // Function to calculate remaining time in minutes and seconds
+  const getRemainingTime = (endSeconds, currentSeconds) => {
+    let remainingSeconds = endSeconds - currentSeconds;
+    let remainingMinutes = Math.floor(remainingSeconds / SECONDS_PER_MINUTE);
+    let remainingExtraSeconds = remainingSeconds % SECONDS_PER_MINUTE;
+    return { remainingMinutes, remainingExtraSeconds };
+  };
 
-  // Handle the break time separately
-  if (isBreakTime) {
-    let totalRemainingSeconds = breakEndTime - totalCurrentSeconds;
-    let remainingMinutes = Math.floor(totalRemainingSeconds / 60);
-    let remainingSeconds = totalRemainingSeconds % 60;
+  // Function to update the display with current or next lesson or break information
+  const updateDisplay = () => {
+    const currentTime = new Date();
+    const totalCurrentSeconds = currentTime.getHours() * SECONDS_PER_HOUR + currentTime.getMinutes() * SECONDS_PER_MINUTE + currentTime.getSeconds();
+    let isBreakTime =
+      totalCurrentSeconds >= BREAK_START_TIME &&
+      totalCurrentSeconds <= BREAK_END_TIME;
 
-    document.getElementById('currentLesson').innerHTML = `Kurze Pause`;
-    document.getElementById('countdown').innerHTML = `${remainingMinutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
-    document.querySelector('#teacher span').innerHTML = '/';
-    return;
-  }
-
-  // Sort the timetable data just in case it's not already sorted
-  timetableData.sort((a, b) => a.startTime - b.startTime);
-
-  // Find the current lesson and the next lesson
-  for (let lesson of timetableData) {
-    const lessonStartSeconds = Math.floor(lesson.startTime / 100) * 3600 + (lesson.startTime % 100) * 60;
-    const lessonEndSeconds = Math.floor(lesson.endTime / 100) * 3600 + (lesson.endTime % 100) * 60;
-
-    if (totalCurrentSeconds >= lessonStartSeconds && totalCurrentSeconds <= lessonEndSeconds) {
-      // In lesson
-      currentLessonFound = true;
-      const remainingSeconds = lessonEndSeconds - totalCurrentSeconds;
-      const remainingMinutes = Math.floor(remainingSeconds / 60);
-      const remainingExtraSeconds = remainingSeconds % 60;
-
-      const subject = lesson.su[0].longname;
-      const teacherNames = lesson.te.map(teacher => teacher.longname).join(", ");
-
-      document.querySelector('#currentLesson span').innerHTML = subject;
-      document.getElementById('countdown').innerHTML = `${remainingMinutes.toString().padStart(2, '0')}:${remainingExtraSeconds.toString().padStart(2, '0')}`;
-      document.querySelector('#teacher span').innerHTML = teacherNames;
-      break;
-    }
-  }
-
-  if (!currentLessonFound) {
-    // Not in lesson
-    const nextLesson = timetableData.find(lesson => Math.floor(lesson.startTime / 100) * 3600 + (lesson.startTime % 100) * 60 > totalCurrentSeconds);
-    if (nextLesson) {
-      const nextLessonStartSeconds = Math.floor(nextLesson.startTime / 100) * 3600 + (nextLesson.startTime % 100) * 60;
-      const remainingSeconds = nextLessonStartSeconds - totalCurrentSeconds;
-      const remainingMinutes = Math.floor(remainingSeconds / 60);
-      const remainingExtraSeconds = remainingSeconds % 60;
-
-      document.getElementById('currentLesson').innerHTML = "Freistunde";
-      document.getElementById('countdown').innerHTML = `${remainingMinutes.toString().padStart(2, '0')}:${remainingExtraSeconds.toString().padStart(2, '0')}`;
-      document.querySelector('#teacher span').innerHTML = "/";
+    // Check if it is break time or lesson time
+    if (isBreakTime) {
+      const { remainingMinutes, remainingExtraSeconds } = getRemainingTime(
+        BREAK_END_TIME,
+        totalCurrentSeconds
+      );
+      document.getElementById("currentLesson").textContent = `Kurze Pause`;
+      document.getElementById("countdown").textContent = `${remainingMinutes.toString().padStart(2, "0")}:${remainingExtraSeconds.toString().padStart(2, "0")}`;
+      document.querySelector("#teacher span").textContent = "/";
     } else {
-      document.getElementById('currentLesson').innerHTML = "Der Schultag ist vorbei.";
-      document.getElementById('countdown').innerHTML = "00:00";
-      document.querySelector('#teacher span').innerHTML = "";
+      let currentLessonFound = false;
+      // Sort timetable data by start time
+      timetableData.sort((a, b) => a.startTime - b.startTime);
+
+      // Iterate over timetable data to find current lesson
+      for (let lesson of timetableData) {
+        const startSeconds = Math.floor(lesson.startTime / 100) * SECONDS_PER_HOUR + (lesson.startTime % 100) * SECONDS_PER_MINUTE;
+        const endSeconds = Math.floor(lesson.endTime / 100) * SECONDS_PER_HOUR + (lesson.endTime % 100) * SECONDS_PER_MINUTE;
+
+        // Check if current time is within lesson time
+        if (totalCurrentSeconds >= startSeconds && totalCurrentSeconds < endSeconds) {
+          currentLessonFound = true;
+          const { remainingMinutes, remainingExtraSeconds } = getRemainingTime(
+            endSeconds,
+            totalCurrentSeconds
+          );
+          // Update teacher and subject information
+          const subject = lesson.su[0].longname.length > 20 ? lesson.su[0].name : lesson.su[0].longname;
+          const teacherNames = lesson.te.map((teacher) => teacher.longname).join(", ");
+          document.querySelector("#currentLesson span").textContent = subject;
+          document.getElementById("countdown").textContent = `${remainingMinutes.toString().padStart(2, "0")}:${remainingExtraSeconds.toString().padStart(2, "0")}`;
+          document.querySelector("#teacher span").textContent = teacherNames;
+          break;
+        }
+      }
+      // If current lesson is not found, display end of school day message
+      if (!currentLessonFound) {
+        document.getElementById("currentLesson").textContent = "Der Schultag ist vorbei.";
+        document.getElementById("countdown").textContent = "00:00";
+        document.querySelector("#teacher span").textContent = "";
+      }
     }
-  }
+  };
+
+  // Call updateDisplay function every second
+  updateDisplay();
+  setInterval(updateDisplay, 1000);
 }
