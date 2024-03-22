@@ -88,7 +88,14 @@ header img {
   min-width: 50%;
 }
 
-
+#logoutButton{
+  background-color: transparent;
+  outline: none;
+  border: none;
+  color: white;
+  font-size: 18px;
+  cursor: pointer;
+}
 
 #mainSection {
   display: flex;
