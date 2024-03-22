@@ -50,9 +50,6 @@ function checkLoginStatus() {
   if (school && username && password) {
     displayMainSection();
     fetchTimetable(school, username, password);
-    setInterval(() => {
-      fetchTimetable(school, username, password);
-    }, 1000);
   } else {
     displayLoginSection();
   }
@@ -82,7 +79,9 @@ function fetchTimetable(school, username, password) {
   .then(response => response.json())
   .then(data => {
     // 'data' contains timetable information
-    updateTimetableDisplay(data);
+    setInterval(() => {
+      updateTimetableDisplay(data);
+    }, 1000);
   })
   .catch(error => {
     console.error('Error fetching timetable:', error);
