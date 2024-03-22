@@ -50,6 +50,9 @@ function checkLoginStatus() {
   if (school && username && password) {
     displayMainSection();
     fetchTimetable(school, username, password);
+    setInterval(() => {
+      fetchTimetable(school, username, password);
+    }, 1000);
   } else {
     displayLoginSection();
   }
