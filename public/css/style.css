@@ -1,0 +1,86 @@
+* {
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: #38858A;
+  color: #333;
+}
+
+header {
+  color: #fff;
+  text-align: center;
+  padding: 20px;
+}
+
+#timer {
+  color: #fff;
+  background-color: #4F9296;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+#timetable {
+  width: 100%;
+  background-color: #4F9296;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 20px;
+  margin-bottom: 20px;
+}
+
+#timer div,
+#stundenplan div {
+  margin-bottom: 10px;
+  display: flex;
+  justify-content: center;
+}
+
+#currentLesson span,
+#countdown span {
+  font-weight: 700;
+}
+
+#countdown {
+  font-weight: 700;
+  font-size: 100px;
+  min-width: 5ch;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 50px;
+  padding: 10px 0px 10px 0px
+}
+
+header img {
+  height: 80%;
+}
+
+.wrapper {
+  height: 100vh;
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-left: 5%;
+  padding-right: 5%;
+}
+
+.main {
+  min-width: 50%;
+}
+
+#mainSection {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}

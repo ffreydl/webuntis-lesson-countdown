@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Modern Schedule and Timer</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@100..900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+  <div class="wrapper">
+    <main>
+      <div id="loginSection">
+        <form id="loginForm">
+          School: <input type="text" id="school" value="htbla_kaindorf" required><br>
+          Username: <input type="text" id="username" required><br>
+          Password: <input type="password" id="password" required><br>
+          <button type="submit">Log In</button>
+        </form>
+      </div>
+      </section>
+      <div id="mainSection" style="display: none;">
+        <section id="timer">
+          <div id="currentLesson">Aktuelle Stunde:&nbsp;<span></span></div>
+          <div id="countdown"><span>00:00</span></div>
+        </section>
+        <div id="timetable">
+          <div id="teacher">Lehrkraft:&nbsp;<span></span></div>
+        </div>
+        <button id="logoutButton">Logout</button>
+      </div>
+    </main>
+  </div>
+  <script src="script/app.js"></script>
+</body>
+</html>

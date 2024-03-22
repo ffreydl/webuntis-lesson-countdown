@@ -1,0 +1,51 @@
+{
+    "Montag": [
+      {"lessonname": "BESP", "starttime": "08:00", "endtime": "08:50"},
+      {"lessonname": "BESP", "starttime": "08:50", "endtime": "09:40"},
+      {"lessonname": "RK", "starttime": "09:40", "endtime": "10:30"},
+      {"lessonname": "BWMRU", "starttime": "10:45", "endtime": "11:35"},
+      {"lessonname": "BWMR", "starttime": "11:35", "endtime": "12:25"},
+      {"lessonname": "CABS_1", "starttime": "12:25", "endtime": "13:15"}
+    ],
+    "Dienstag": [
+      {"lessonname": "BWMRU", "starttime": "08:00", "endtime": "08:50"},
+      {"lessonname": "NSCS_1", "starttime": "08:50", "endtime": "09:40"},
+      {"lessonname": "NW2C", "starttime": "09:40", "endtime": "10:30"},
+      {"lessonname": "GES", "starttime": "10:45", "endtime": "11:35"},
+      {"lessonname": "FREE LESSON", "starttime": "11:35", "endtime": "12:25"},
+      {"lessonname": "AM", "starttime": "12:25", "endtime": "13:15"},
+      {"lessonname": "POS1U", "starttime": "13:15", "endtime": "14:00"},
+      {"lessonname": "POS1U", "starttime": "14:00", "endtime": "14:45"},
+      {"lessonname": "D", "starttime": "14:50", "endtime": "15:35"},
+      {"lessonname": "SOPK", "starttime": "15:35", "endtime": "16:20"}
+    ],
+    "Mittwoch": [
+      {"lessonname": "NSCS_1U", "starttime": "08:00", "endtime": "08:50"},
+      {"lessonname": "NSCS_1U", "starttime": "08:50", "endtime": "09:40"},
+      {"lessonname": "NW2C", "starttime": "09:40", "endtime": "10:30"},
+      {"lessonname": "E", "starttime": "10:45", "endtime": "11:35"},
+      {"lessonname": "GES", "starttime": "11:35", "endtime": "12:25"},
+      {"lessonname": "FCE", "starttime": "12:25", "endtime": "13:15"}
+    ],
+    "Donnerstag": [
+      {"lessonname": "LOAL", "starttime": "08:00", "endtime": "08:50"},
+      {"lessonname": "D", "starttime": "08:50", "endtime": "09:40"},
+      {"lessonname": "E", "starttime": "09:40", "endtime": "10:30"},
+      {"lessonname": "E", "starttime": "10:45", "endtime": "11:35"},
+      {"lessonname": "FREE LESSON", "starttime": "11:35", "endtime": "12:25"},
+      {"lessonname": "AM", "starttime": "12:25", "endtime": "13:15"},
+      {"lessonname": "DBI_2", "starttime": "13:15", "endtime": "14:00"},
+      {"lessonname": "DBI_2", "starttime": "14:00", "endtime": "14:45"}
+    ],
+    "Freitag": [
+      {"lessonname": "POS1", "starttime": "08:00", "endtime": "08:50"},
+      {"lessonname": "POS1U", "starttime": "08:50", "endtime": "09:40"},
+      {"lessonname": "RK", "starttime": "09:40", "endtime": "10:30"},
+      {"lessonname": "NW2C", "starttime": "10:45", "endtime": "11:35"},
+      {"lessonname": "AM", "starttime": "11:35", "endtime": "12:25"},
+      {"lessonname": "FREE LESSON", "starttime": "12:25", "endtime": "13:15"},
+      {"lessonname": "CABS_1", "starttime": "13:15", "endtime": "14:00"},
+      {"lessonname": "WMC_1U", "starttime": "14:00", "endtime": "14:45"},
+      {"lessonname": "WMC_1", "starttime": "14:50", "endtime": "15:35"}
+    ]
+  }  
