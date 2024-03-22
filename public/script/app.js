@@ -179,7 +179,7 @@ function updateTimetableDisplay(timetableData) {
       const remainingMinutes = totalNextStartMinutes - totalCurrentMinutes;
 
       document.getElementById('currentLesson').innerHTML = "Freistunde";
-      document.getElementById('countdown').innerHTML = `Nächste Stunde in: ${remainingMinutes} Minuten`;
+      document.getElementById('countdown').innerHTML = `${remainingMinutes}`;
       document.querySelector('#teacher span').innerHTML = "/";
     } else {
       document.getElementById('currentLesson').innerHTML = "Der Schultag ist vorbei.";
