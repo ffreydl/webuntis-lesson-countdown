@@ -124,23 +124,16 @@ function updateTimetableDisplay(timetableData) {
   // Function to update the display with current or next lesson or break information
   const updateDisplay = () => {
     const currentTime = new Date();
-    currentTime.setMinutes(currentTime.getMinutes -10);
     const totalCurrentSeconds = currentTime.getHours() * SECONDS_PER_HOUR + currentTime.getMinutes() * SECONDS_PER_MINUTE + currentTime.getSeconds();
-    let isBreakTime = (totalCurrentSeconds >= BREAK_START_TIME && totalCurrentSeconds <= BREAK_END_TIME) || (totalCurrentSeconds >= BREAK_START_TIME_2 && totalCurrentSeconds <= BREAK_END_TIME_2);
-    console.log(isBreakTime);
+    let isBreakTime = (totalCurrentSeconds >= BREAK_START_TIME && totalCurrentSeconds < BREAK_END_TIME) || (totalCurrentSeconds >= BREAK_START_TIME_2 && totalCurrentSeconds < BREAK_END_TIME_2);
 
     // Check if it is break time or lesson time
     if (isBreakTime) {
-      if(totalCurrentSeconds >= BREAK_END_TIME_1) {
-        const { remainingMinutes, remainingExtraSeconds } = getRemainingTime(
-          BREAK_END_TIME_2,
-          totalCurrentSeconds
-        );
+      let remainingMinutes, remainingExtraSeconds;
+      if (totalCurrentSeconds >= BREAK_START_TIME_2) {
+        ({ remainingMinutes, remainingExtraSeconds } = getRemainingTime(BREAK_END_TIME_2, totalCurrentSeconds));
       } else {
-        const { remainingMinutes, remainingExtraSeconds } = getRemainingTime(
-          BREAK_END_TIME,
-          totalCurrentSeconds
-        );
+        ({ remainingMinutes, remainingExtraSeconds } = getRemainingTime(BREAK_END_TIME, totalCurrentSeconds));
       }
 
       document.getElementById("currentLesson").textContent = `Kurze Pause`;
