@@ -124,8 +124,10 @@ function updateTimetableDisplay(timetableData) {
   // Function to update the display with current or next lesson or break information
   const updateDisplay = () => {
     const currentTime = new Date();
+    currentTime.setMinutes(currentTime.getMinutes -10);
     const totalCurrentSeconds = currentTime.getHours() * SECONDS_PER_HOUR + currentTime.getMinutes() * SECONDS_PER_MINUTE + currentTime.getSeconds();
-    let isBreakTime = (totalCurrentSeconds >= BREAK_START_TIME && totalCurrentSeconds <= BREAK_END_TIME) ||(totalCurrentSeconds >= BREAK_START_TIME_2 && totalCurrentSeconds <= BREAK_END_TIME_2);
+    let isBreakTime = (totalCurrentSeconds >= BREAK_START_TIME && totalCurrentSeconds <= BREAK_END_TIME) || (totalCurrentSeconds >= BREAK_START_TIME_2 && totalCurrentSeconds <= BREAK_END_TIME_2);
+    console.log(isBreakTime);
 
     // Check if it is break time or lesson time
     if (isBreakTime) {
