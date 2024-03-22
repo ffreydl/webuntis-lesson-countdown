@@ -88,12 +88,21 @@ header img {
   min-width: 50%;
 }
 
+
+
 #mainSection {
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
 }
+
+#teacher{
+  color: white;
+  font-weight: 500;
+}
+
+/* Start of the Login form*/
 
 #loginForm{
   

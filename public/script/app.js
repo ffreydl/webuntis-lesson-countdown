@@ -3,6 +3,8 @@ const SECONDS_PER_HOUR = 3600;
 const SECONDS_PER_MINUTE = 60;
 const BREAK_START_TIME = 10 * SECONDS_PER_HOUR + 30 * SECONDS_PER_MINUTE; // 10:30 AM in seconds
 const BREAK_END_TIME = 10 * SECONDS_PER_HOUR + 45 * SECONDS_PER_MINUTE; // 10:45 AM in seconds
+const BREAK_START_TIME_2 = 14 * SECONDS_PER_HOUR + 45 * SECONDS_PER_MINUTE; // 14:45 AM in seconds
+const BREAK_END_TIME_2 = 14 * SECONDS_PER_HOUR + 50 * SECONDS_PER_MINUTE; // 14:50 AM in seconds
 
 // Init application once DOM is fully loaded
 document.addEventListener("DOMContentLoaded", () => {
@@ -123,16 +125,22 @@ function updateTimetableDisplay(timetableData) {
   const updateDisplay = () => {
     const currentTime = new Date();
     const totalCurrentSeconds = currentTime.getHours() * SECONDS_PER_HOUR + currentTime.getMinutes() * SECONDS_PER_MINUTE + currentTime.getSeconds();
-    let isBreakTime =
-      totalCurrentSeconds >= BREAK_START_TIME &&
-      totalCurrentSeconds <= BREAK_END_TIME;
+    let isBreakTime = (totalCurrentSeconds >= BREAK_START_TIME && totalCurrentSeconds <= BREAK_END_TIME) ||(totalCurrentSeconds >= BREAK_START_TIME_2 && totalCurrentSeconds <= BREAK_END_TIME_2);
 
     // Check if it is break time or lesson time
     if (isBreakTime) {
-      const { remainingMinutes, remainingExtraSeconds } = getRemainingTime(
-        BREAK_END_TIME,
-        totalCurrentSeconds
-      );
+      if(totalCurrentSeconds >= BREAK_END_TIME_1) {
+        const { remainingMinutes, remainingExtraSeconds } = getRemainingTime(
+          BREAK_END_TIME_2,
+          totalCurrentSeconds
+        );
+      } else {
+        const { remainingMinutes, remainingExtraSeconds } = getRemainingTime(
+          BREAK_END_TIME,
+          totalCurrentSeconds
+        );
+      }
+
       document.getElementById("currentLesson").textContent = `Kurze Pause`;
       document.getElementById("countdown").textContent = `${remainingMinutes.toString().padStart(2, "0")}:${remainingExtraSeconds.toString().padStart(2, "0")}`;
       document.querySelector("#teacher span").textContent = "/";
