@@ -1,3 +1,11 @@
+:root{
+
+  --turk-backround-color: #38858A;
+  --turk-main-color: #4F9296;
+  --shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+
+}
+
 * {
   box-sizing: border-box;
   font-family: 'Inter', sans-serif;
@@ -6,7 +14,7 @@
 body {
   margin: 0;
   padding: 0;
-  background-color: #38858A;
+  background-color: var(--turk-backround-color);
   color: #333;
 }
 
@@ -18,18 +26,18 @@ header {
 
 #timer {
   color: #fff;
-  background-color: #4F9296;
+  background-color: var(--turk-main-color);
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow);
   padding: 20px;
   margin-bottom: 20px;
 }
 
 #timetable {
   width: 100%;
-  background-color: #4F9296;
+  background-color: var(--turk-main-color);
   border-radius: 8px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--shadow);
   padding: 20px;
   margin-bottom: 20px;
 }
@@ -87,23 +95,65 @@ header img {
 
 #loginForm{
   
-  background-color: #4F9296;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  padding: 20px;
+  background-color: white;
+  box-shadow: var(--shadow);
+  padding: 35px;
+  
   display: flex;
   flex-direction: column;
   border-radius: 10px;
-  color: white;
+  color: black;
   font-family: "Inter", sans-serif;
   font-weight: 500;
+
 }
+
+#loginForm h1{
+  text-align: center;
+  margin: 0;
+  margin-top: 2vh;
+}
+
+#loginForm p{
+  text-align: center;
+  color: rgba(0, 0, 0, 0.152);
+  margin-bottom: 5vh;
+  font-weight: 400;
+}
+
 
 #loginForm input{
   margin-top: 6px;
-  padding: 5px;
+  padding: 9px;
   border-radius: 3px;
-  border: none;
+  border: 1px solid rgba(0, 0, 0, 0.134);
   outline: none;
   font-family: "Inter";
+  border-radius: 3px;
+}
+
+#loginForm input:focus{
+  border: 1px solid var(--turk-main-color);
+}
+
+#loginForm input:-webkit-autofill{
+  background-color: transparent;
+}
+
+#loginButton{
+
+  padding: 15px;
+  outline: none;
+  border: none;
+  border-radius: 3px;
+  font-weight: 600;
+  background-color: var(--turk-main-color);
+  color: white;
+  cursor: pointer;
+  transition: transform 0.7s ease;
+}
+
+#loginButton:hover{
+  transform: scale(1.018);
 }
 
