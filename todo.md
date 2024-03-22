@@ -8,6 +8,7 @@
 ### 2. Nice-to-have
 - Progress bar
 - Nächste Stunde anzeigen
+- Heutiges Datum, jetzige Uhrzeit
 
 ### 3. Vermeidung der unangenehmen Ladezeit
 - **Skeleton Screens**: Implementierung zur Verbesserung der Nutzererfahrung während des Ladens.
